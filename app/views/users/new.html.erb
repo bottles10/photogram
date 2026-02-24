@@ -40,7 +40,7 @@
             Registering with a bio like  <script>alert('bio XSS')</script>
             will execute that script for anyone who views this user's profile. %>
         <%= f.label :bio, class: "block text-sm font-semibold text-gray-700 mb-1" do %>
-          Bio <span class="font-normal text-red-500 text-xs">(XSS target — HTML is rendered)</span>
+          Bio <span class="font-normal text-rose-300 text-xs">(HTML is rendered)</span>
         <% end %>
         <%= f.text_area :bio,
             placeholder: "Tell the world about yourself...",
