@@ -1,3 +1,5 @@
+<%# app/views/posts/index.html.erb %>
+
 <%#
   ============================================================
   SQL INJECTION TARGET — Search bar
@@ -63,9 +65,14 @@
             <% end %>
           </p>
 
-          <%# Title %>
+          <%# Title — injected rows have nil id so we skip the link for them %>
           <h2 class="font-bold text-gray-900 text-sm mb-2 leading-snug">
-            <%= link_to post.title, post_path(post), class: "hover:underline" rescue post.title %>
+            <% if post.id %>
+              <%= link_to post.title, post_path(post), class: "hover:underline" %>
+            <% else %>
+              <%# This is a UNION-injected row — no real post id exists %>
+              <span class="text-red-600"><%= post.title %></span>
+            <% end %>
           </h2>
 
           <%#
@@ -73,16 +80,21 @@
             raw() bypasses Rails' built-in HTML escaping.
             Any <script> or <img onerror=...> in the caption
             runs as JavaScript in every visitor's browser.
-            The safe version is just:  <%= post.caption %>
+            The safe version is just:  post.caption 
           %>
           <p class="text-gray-600 text-sm line-clamp-3"><%= raw post.caption %></p>
 
           <%# Actions footer %>
           <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-            <%= link_to "View post →", post_path(post) rescue "#",
-                class: "text-blue-500 text-xs font-semibold hover:underline" %>
+            <% if post.id %>
+              <%= link_to "View post →", post_path(post),
+                  class: "text-blue-500 text-xs font-semibold hover:underline" %>
+            <% else %>
+              <%# Injected row — label it clearly for the demo %>
+              <span class="text-red-500 text-xs font-semibold">⚠ EXFILTRATED ROW</span>
+            <% end %>
 
-            <% if logged_in? %>
+            <% if logged_in? && post.id %>
               <%#
                 ⚠️  VULNERABILITY — IDOR: the delete button sends to
                 /posts/:id with no ownership check. Any logged-in user

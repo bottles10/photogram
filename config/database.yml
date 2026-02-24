@@ -87,9 +87,7 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: photogram_production
-    username: photogram
-    password: <%= ENV["PHOTOGRAM_DATABASE_PASSWORD"] %>
+    url: <%= Rails.application.credentials.dig(:DATABASE_URL) %>
   cache:
     <<: *primary_production
     database: photogram_production_cache

@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     #
     # The safe approach uses strong parameters to explicitly whitelist fields:
     #   params.require(:user).permit(:username, :email, :password, :bio)
-    @user = User.new(params[:user])
+    @user = User.new(params[:user].permit!)
 
     if @user.save
       session[:user_id] = @user.id

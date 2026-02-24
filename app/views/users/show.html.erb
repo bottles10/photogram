@@ -18,7 +18,7 @@
           <script>alert('XSS from bio!')</script>
         ...that script will execute in the browser of EVERY visitor
         to this profile page.
-        The safe alternative is simply:  <%= @user.bio %>
+        The safe alternative is simply:  @user.bio
       %>
       <p class="text-sm text-gray-700"><%= raw @user.bio %></p>
 

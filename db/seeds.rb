@@ -36,8 +36,8 @@ puts "Seeding posts..."
 
 Post.create!(
   user:      admin,
-  title:     "Welcome to VulnGram",
-  caption:   "This is a deliberately vulnerable demo app. Try breaking it!",
+  title:     "Welcome to Photogram",
+  caption:   "Photogram is where you share about your explores!",
   image_url: "https://picsum.photos/seed/admin/600/400"
 )
 
