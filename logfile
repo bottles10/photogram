@@ -9,3 +9,4 @@
 2026-02-24 01:10:02.125 EST [66748] LOG:  checkpoint starting: immediate force wait
 2026-02-24 01:10:02.133 EST [66748] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.004 s, sync=0.002 s, total=0.009 s; sync files=3, longest=0.001 s, average=0.001 s; distance=6 kB, estimate=6 kB; lsn=0/15B44C28, redo lsn=0/15B44BF0
 2026-02-24 01:15:02.136 EST [66748] LOG:  checkpoint starting: time
+2026-02-24 01:18:15.129 EST [66748] LOG:  checkpoint complete: wrote 1885 buffers (11.5%); 0 WAL file(s) added, 0 removed, 1 recycled; write=192.962 s, sync=0.025 s, total=192.993 s; sync files=624, longest=0.003 s, average=0.001 s; distance=8780 kB, estimate=8780 kB; lsn=0/16404200, redo lsn=0/163D7E28
