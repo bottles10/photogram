@@ -1,0 +1,10 @@
+2026-02-24 01:09:49.106 EST [66737] FATAL:  lock file "postmaster.pid" already exists
+2026-02-24 01:09:49.106 EST [66737] HINT:  Is another postmaster (PID 76039) running in data directory "/opt/local/var/db/postgresql16/defaultdb"?
+2026-02-24 01:09:55.887 EST [66747] LOG:  starting PostgreSQL 16.11 on x86_64-apple-darwin21.6.0, compiled by Apple clang version 13.1.6 (clang-1316.0.21.2.5), 64-bit
+2026-02-24 01:09:55.888 EST [66747] LOG:  listening on IPv6 address "::1", port 5432
+2026-02-24 01:09:55.888 EST [66747] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-02-24 01:09:55.889 EST [66747] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2026-02-24 01:09:55.960 EST [66750] LOG:  database system was shut down at 2026-02-24 01:09:52 EST
+2026-02-24 01:09:55.993 EST [66747] LOG:  database system is ready to accept connections
+2026-02-24 01:10:02.125 EST [66748] LOG:  checkpoint starting: immediate force wait
+2026-02-24 01:10:02.133 EST [66748] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.004 s, sync=0.002 s, total=0.009 s; sync files=3, longest=0.001 s, average=0.001 s; distance=6 kB, estimate=6 kB; lsn=0/15B44C28, redo lsn=0/15B44BF0
