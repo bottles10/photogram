@@ -1,0 +1,59 @@
+<div class="max-w-sm mx-auto mt-12">
+  <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+
+    <h1 class="text-2xl font-bold text-center mb-1">Create Account</h1>
+    <p class="text-center text-gray-500 text-sm mb-6">Join Photogram today</p>
+
+    <%= form_with model: @user, url: signup_path, local: true do |f| %>
+
+      <% if @user.errors.any? %>
+        <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 mb-4">
+          <% @user.errors.full_messages.each do |msg| %>
+            <p><%= msg %></p>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="mb-4">
+        <%= f.label :username, "Username", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.text_field :username,
+            placeholder: "Choose a username",
+            class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :email, "Email", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.email_field :email,
+            placeholder: "you@example.com",
+            class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :password, "Password", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.password_field :password,
+            placeholder: "Choose a password",
+            class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" %>
+      </div>
+
+      <div class="mb-6">
+        <%# ⚠️ VULNERABILITY — Bio field is rendered with raw() on the profile page.
+            Registering with a bio like  <script>alert('bio XSS')</script>
+            will execute that script for anyone who views this user's profile. %>
+        <%= f.label :bio, class: "block text-sm font-semibold text-gray-700 mb-1" do %>
+          Bio <span class="font-normal text-red-500 text-xs">(XSS target — HTML is rendered)</span>
+        <% end %>
+        <%= f.text_area :bio,
+            placeholder: "Tell the world about yourself...",
+            rows: 3,
+            class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none" %>
+      </div>
+
+      <%= f.submit "Create Account",
+          class: "w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg cursor-pointer transition" %>
+    <% end %>
+
+    <p class="text-center text-sm text-gray-500 mt-5">
+      Already have an account? <%= link_to "Log in", login_path, class: "text-blue-500 font-semibold hover:underline" %>
+    </p>
+  </div>
+</div>

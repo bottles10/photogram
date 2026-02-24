@@ -1,0 +1,51 @@
+<div class="max-w-2xl mx-auto">
+
+  <%# ── Profile header ─────────────────────────────────────── %>
+  <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 flex items-start gap-6">
+    <div class="w-20 h-20 rounded-full bg-linear-to-br from-blue-400 to-purple-500
+                flex items-center justify-center text-white text-3xl font-bold shrink-0">
+      <%= @user.username[0].upcase %>
+    </div>
+
+    <div class="flex-1 min-w-0">
+      <h1 class="text-xl font-bold mb-1"><%= @user.username %></h1>
+      <p class="text-gray-500 text-sm mb-3"><%= @user.email %></p>
+
+      <%#
+        ⚠️  VULNERABILITY — Stored XSS in user bio
+        raw() renders the bio without HTML escaping.
+        If a user registers with a bio like:
+          <script>alert('XSS from bio!')</script>
+        ...that script will execute in the browser of EVERY visitor
+        to this profile page.
+        The safe alternative is simply:  <%= @user.bio %>
+      %>
+      <p class="text-sm text-gray-700"><%= raw @user.bio %></p>
+
+      <p class="text-xs text-gray-400 mt-3"><%= @posts.count %> posts</p>
+    </div>
+  </div>
+
+  <%# ── Post grid ──────────────────────────────────────────── %>
+  <% if @posts.any? %>
+    <div class="grid grid-cols-3 gap-1">
+      <% @posts.each do |post| %>
+        <%= link_to post_path(post) do %>
+          <div class="relative aspect-square bg-gray-100 overflow-hidden group">
+            <% if post.image_url.present? %>
+              <img src="<%= post.image_url %>" alt="<%= post.title %>"
+                   class="w-full h-full object-cover group-hover:opacity-80 transition">
+            <% else %>
+              <div class="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                No image
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-center text-gray-400 text-sm py-12">No posts yet.</p>
+  <% end %>
+
+</div>

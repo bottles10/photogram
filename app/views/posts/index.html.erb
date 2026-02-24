@@ -1,0 +1,106 @@
+<%#
+  ============================================================
+  SQL INJECTION TARGET — Search bar
+  ============================================================
+  The search value is pasted into a raw LIKE query in
+  PostsController#index.  Use this UNION payload to dump
+  the entire users table into the feed:
+
+    ' UNION SELECT id, username, password, email, bio, created_at, updated_at FROM users --
+
+  The post "title" column will show each username, and the
+  "caption" column will show each plain-text password.
+  ============================================================
+%>
+
+<%# ── Top bar: search + new post ──────────────────────────────── %>
+<div class="flex items-center gap-3 mb-6">
+  <%= form_with url: posts_path, method: :get, local: true, class: "flex-1 flex gap-2" do |f| %>
+    <%= f.text_field :search,
+        value: params[:search],
+        placeholder: "Search posts…  (try a UNION SQLi payload here)",
+        class: "flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" %>
+    <%= f.submit "Search",
+        class: "bg-gray-100 hover:bg-gray-200 border border-gray-300 text-sm font-medium px-4 py-2 rounded-lg cursor-pointer" %>
+  <% end %>
+
+  <% if logged_in? %>
+    <%= link_to "New Post", new_post_path,
+        class: "bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold px-4 py-2 rounded-lg whitespace-nowrap" %>
+  <% end %>
+</div>
+
+<%# ── Vulnerability reminder banner ──────────────────────────── %>
+<div class="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-xs text-amber-800 mb-6">
+  <span class="font-semibold">Active vulnerabilities on this page:</span>
+  SQLi in search bar &nbsp;·&nbsp; Stored XSS in post captions
+</div>
+
+<%# ── Post grid ──────────────────────────────────────────────── %>
+<% if @posts.any? %>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <% @posts.each do |post| %>
+      <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+
+        <%# Post image %>
+        <% if post.image_url.present? %>
+          <img src="<%= post.image_url %>" alt="<%= post.title %>"
+               class="w-full h-48 object-cover">
+        <% else %>
+          <div class="w-full h-28 bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+            No image
+          </div>
+        <% end %>
+
+        <div class="p-4">
+          <%# Author %>
+          <p class="text-xs font-semibold text-gray-500 mb-1">
+            <% if post.try(:user) %>
+              <%= link_to post.user.username, user_path(post.user), class: "hover:underline" %>
+            <% elsif post.try(:email) %>
+              <%# Injected user row shows here when UNION attack succeeds %>
+              <span class="text-red-500">⚠ DUMPED: <%= post.email %></span>
+            <% end %>
+          </p>
+
+          <%# Title %>
+          <h2 class="font-bold text-gray-900 text-sm mb-2 leading-snug">
+            <%= link_to post.title, post_path(post), class: "hover:underline" rescue post.title %>
+          </h2>
+
+          <%#
+            ⚠️  VULNERABILITY — Stored XSS in post caption
+            raw() bypasses Rails' built-in HTML escaping.
+            Any <script> or <img onerror=...> in the caption
+            runs as JavaScript in every visitor's browser.
+            The safe version is just:  <%= post.caption %>
+          %>
+          <p class="text-gray-600 text-sm line-clamp-3"><%= raw post.caption %></p>
+
+          <%# Actions footer %>
+          <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+            <%= link_to "View post →", post_path(post) rescue "#",
+                class: "text-blue-500 text-xs font-semibold hover:underline" %>
+
+            <% if logged_in? %>
+              <%#
+                ⚠️  VULNERABILITY — IDOR: the delete button sends to
+                /posts/:id with no ownership check. Any logged-in user
+                can delete any post by changing the ID in the request.
+              %>
+              <%= button_to "Delete", post_path(post), method: :delete,
+                  data: { turbo_confirm: "Delete this post?" },
+                  class: "text-red-400 hover:text-red-600 text-xs font-medium bg-transparent border-0 cursor-pointer" %>
+            <% end %>
+          </div>
+        </div>
+
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="text-center py-20 text-gray-400">
+    <p class="text-4xl mb-3">📷</p>
+    <p class="text-sm">No posts yet. Be the first to share!</p>
+  </div>
+<% end %>
