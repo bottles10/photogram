@@ -100,12 +100,11 @@
     <div class="bg-white border border-gray-200 rounded-2xl p-5">
       <h3 class="text-sm font-bold mb-3">
         Add a comment
-        <span class="text-red-400 font-normal text-xs">(XSS target — HTML is rendered)</span>
       </h3>
 
       <%= form_with model: [@post, @comment], local: true do |f| %>
         <%= f.text_area :body,
-            placeholder: "Write something… or try <script>alert(1)</script>",
+            placeholder: "Write something…",
             rows: 3,
             class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none mb-3" %>
         <%= f.submit "Post Comment",
