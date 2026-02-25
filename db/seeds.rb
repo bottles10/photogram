@@ -11,23 +11,23 @@
 
 puts "Seeding users..."
 
-admin = User.create!(
-  username: "admin",
-  email:    "admin@vulngram.local",
+fotogram = User.create!(
+  username: "fotogram",
+  email:    "fotogram@fotogram.local",
   password: "admin123",
   bio:      "I run this place."
 )
 
 alice = User.create!(
   username: "alice",
-  email:    "alice@vulngram.local",
+  email:    "alice@fotogram.local",
   password: "password1",
   bio:      "Photography enthusiast 📸"
 )
 
 bob = User.create!(
   username: "bob",
-  email:    "bob@vulngram.local",
+  email:    "bob@fotogram.local",
   password: "password2",
   bio:      "Just here for the memes."
 )
@@ -35,9 +35,9 @@ bob = User.create!(
 puts "Seeding posts..."
 
 Post.create!(
-  user:      admin,
-  title:     "Welcome to Photogram",
-  caption:   "Photogram is where you share about your explores!",
+  user:      fotogram,
+  title:     "Welcome to Fotogram",
+  caption:   "Fotogram is where you share about your travel explores!",
   image_url: "https://picsum.photos/seed/admin/600/400"
 )
 

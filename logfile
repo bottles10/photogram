@@ -42,3 +42,9 @@
 2026-02-24 03:45:03.081 EST [66748] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.509 s, sync=0.007 s, total=0.523 s; sync files=6, longest=0.003 s, average=0.002 s; distance=4 kB, estimate=2764 kB; lsn=0/1640F9A8, redo lsn=0/1640F970
 2026-02-24 04:05:02.087 EST [66748] LOG:  checkpoint starting: time
 2026-02-24 04:05:03.537 EST [66748] LOG:  checkpoint complete: wrote 15 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.440 s, sync=0.004 s, total=1.453 s; sync files=15, longest=0.002 s, average=0.001 s; distance=11 kB, estimate=2489 kB; lsn=0/16412638, redo lsn=0/16412600
+2026-02-24 16:35:52.274 EST [66748] LOG:  checkpoint starting: time
+2026-02-24 16:35:52.815 EST [66748] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.526 s, sync=0.003 s, total=0.543 s; sync files=6, longest=0.002 s, average=0.001 s; distance=6 kB, estimate=2240 kB; lsn=0/16413E60, redo lsn=0/16413E28
+2026-02-24 21:13:08.076 EST [81050] ERROR:  UNION types bigint and character varying cannot be matched at character 59
+2026-02-24 21:13:08.076 EST [81050] STATEMENT:  SELECT * FROM posts WHERE title LIKE '%' UNION SELECT id, username, password, email, bio, created_at, updated_at FROM users --%' ORDER BY created_at DESC /*action='index',application='Photogram',controller='posts'*/
+2026-02-24 22:09:11.829 EST [66748] LOG:  checkpoint starting: time
+2026-02-24 22:09:13.278 EST [66748] LOG:  checkpoint complete: wrote 15 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.441 s, sync=0.004 s, total=1.449 s; sync files=15, longest=0.002 s, average=0.001 s; distance=12 kB, estimate=2018 kB; lsn=0/164170F0, redo lsn=0/164170B8
